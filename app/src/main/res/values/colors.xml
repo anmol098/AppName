@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+
+
+    <color name="div">#d5c5a4</color>
+    <color name="text">#7C00EC</color>
+    <color name="textred">#fb397d</color>
+    <color name="textwhite">#ffffff</color>
+    <color name="drawerBackground">#ffe0e0</color>
+
+    <color name="Wheat">#F5DEB3</color>
+    <color name="color">#efdd83</color>
+
+    <color name="black_overlay">#66000000</color>
+    <color name="material_yellow_a700">#FFD600</color>
+</resources>
