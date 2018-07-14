@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -14,7 +15,7 @@ import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
 
-public class MyArrayAdapter  extends ArrayAdapter < MyDataModel > {
+public class MyArrayAdapter extends ArrayAdapter<MyDataModel> {
 
     List < MyDataModel > modelList;
     Context context;
@@ -48,8 +49,17 @@ public class MyArrayAdapter  extends ArrayAdapter < MyDataModel > {
         }
 
         MyDataModel item = getItem(position);
-        vh.textViewItem.setText(item.getItem());
-        vh.textViewPrice.setText(String.valueOf(inrFormat.format(item.getPrice())));
+        if (item.getProductStatus()) {
+            vh.textViewItem.setText(item.getItem());
+            vh.textViewPrice.setText(String.valueOf(inrFormat.format(item.getPrice())));
+
+            if (item.getType())
+                vh.imageViewType.setImageResource(R.drawable.ic_veg);
+            else
+                vh.imageViewType.setImageResource(R.drawable.ic_non_veg);
+        } else {
+
+        }
 
 
 
@@ -62,21 +72,22 @@ public class MyArrayAdapter  extends ArrayAdapter < MyDataModel > {
         public final RelativeLayout rootView;
         public final TextView textViewItem;
         public final TextView textViewPrice;
+        public final ImageView imageViewType;
 
 
-
-        private ViewHolder(RelativeLayout rootView, TextView textViewItem, TextView textViewPrice) {
+        private ViewHolder(RelativeLayout rootView, TextView textViewItem, TextView textViewPrice, ImageView imageViewType) {
             this.rootView = rootView;
             this.textViewPrice = textViewPrice;
             this.textViewItem = textViewItem;
-
+            this.imageViewType = imageViewType;
         }
 
         public static ViewHolder create(RelativeLayout rootView) {
             TextView textViewPrice = rootView.findViewById(R.id.price);
             TextView textViewItem = rootView.findViewById(R.id.item);
+            ImageView imageViewType = rootView.findViewById(R.id.foodType);
 
-            return new ViewHolder(rootView, textViewItem,textViewPrice);
+            return new ViewHolder(rootView, textViewItem, textViewPrice, imageViewType);
         }
     }
 }

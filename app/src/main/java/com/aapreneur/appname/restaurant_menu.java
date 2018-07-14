@@ -2,8 +2,9 @@ package com.aapreneur.appname;
 
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -24,6 +25,7 @@ public class restaurant_menu extends AppCompatActivity {
     private ListView listView;
     private ArrayList<MyDataModel> list;
     private MyArrayAdapter adapter;
+    String barcode;
 
 
 
@@ -37,9 +39,20 @@ public class restaurant_menu extends AppCompatActivity {
         list = new ArrayList<>();
 
         adapter = new MyArrayAdapter(this, list);
-        listView = (ListView) findViewById(R.id.listView);
+        listView = findViewById(R.id.listView);
         listView.setAdapter(adapter);
-        new GetContacts().execute();
+
+        barcode = getIntent().getStringExtra("table");
+
+        // close the activity in case of empty barcode
+        if (TextUtils.isEmpty(barcode)) {
+            Toast.makeText(getApplicationContext(), "Barcode is empty!", Toast.LENGTH_LONG).show();
+            finish();
+        } else {
+
+
+            new GetContacts().execute();
+        }
     }
     /**
      * Async task class to get json by making HTTP call
@@ -62,43 +75,46 @@ public class restaurant_menu extends AppCompatActivity {
             HttpHandler sh = new HttpHandler();
 
             // Making a request to url and getting response
-            String jsonStr = sh.makeServiceCall(url);
+            String jsonStr = sh.makeServiceCall(url + barcode);
 
             Log.e(TAG, "Response from url: " + jsonStr);
 
             if (jsonStr != null) {
                 try {
                     JSONObject jsonObj = new JSONObject(jsonStr);
+                    Log.e("price", "price" + jsonObj.getString("table"));
+                    JSONArray items = jsonObj.getJSONArray("items");
+                    for (int i = 0; i < items.length(); i++) {
+                        JSONObject c = items.getJSONObject(i);
+                        MyDataModel model = new MyDataModel();
+                        String category = c.getString("category");
+                        boolean type = c.getBoolean("isVeg");
+                        String item = c.getString("item");
+                        String description = c.getString("description");
+                        boolean productStatus = c.getBoolean("isActive");
+                        double price = c.getDouble("price");
 
-                    JSONArray menu = jsonObj.getJSONArray("menu");
-                    for(int i =0; i < menu.length();i++){
-                        JSONObject c = menu.getJSONObject(i);
-                        JSONArray catagory = c.getJSONArray("catagory"+(i+1));
-                        for(int j = 0;j<catagory.length();j++){
-                            MyDataModel model = new MyDataModel();
-                            JSONObject fooditem = catagory.getJSONObject(j);
-                            String Catagory = fooditem.getString("catagory_name");
-                            String id = fooditem.getString("id");
-                            String item = fooditem.getString("item");
-                            double price =Double.parseDouble(fooditem.getString("price"));
-                            Log.e("ID", "ID " + id);
-                            Log.e("item", "item " + item);
-                            Log.e("price", "price" + price);
+                        Log.e("item", "item " + item);
+                        Log.e("price", "price" + price);
+                        Log.e("catagory", "cataagory " + category);
 
-                            model.setItem(item);
-                            model.setPrice(price);
+                        model.setItem(item);
+                        model.setPrice(price);
+                        model.setType(type);
+                        model.setDescription(description);
+                        model.setProductStatus(productStatus);
 
-                            list.add(model);
-
-
-
-
-                        }
-
-
-
-
+                        list.add(model);
                     }
+                    JSONArray categories = jsonObj.getJSONArray("categories");
+                    for (int j = 0; j < categories.length(); j++) {
+                        //JSONObject d = categories.getJSONObject(j);
+                        MyDataModel model = new MyDataModel();
+                        model.setCategory(categories.getString(j));
+                        Log.e("catagory", "cataagory " + categories.getString(j));
+                    }
+
+
                 } catch (final JSONException e) {
                     Log.e(TAG, "Json parsing error: " + e.getMessage());
                     runOnUiThread(new Runnable() {
