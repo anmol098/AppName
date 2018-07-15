@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, scanActivity.class));
+                startActivity(new Intent(MainActivity.this, restaurant_menu.class));
 
             }
         });

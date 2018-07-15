@@ -1,15 +1,18 @@
 package com.aapreneur.appname.resources;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.aapreneur.appname.R;
+import com.aapreneur.appname.cart;
 
 import java.text.NumberFormat;
 import java.util.List;
@@ -17,8 +20,8 @@ import java.util.Locale;
 
 public class MyArrayAdapter extends ArrayAdapter<MyDataModel> {
 
-    List < MyDataModel > modelList;
-    Context context;
+    private List<MyDataModel> modelList;
+    private Context context;
     private LayoutInflater mInflater;
 
     Locale INR = new Locale("en", "IN");
@@ -26,16 +29,12 @@ public class MyArrayAdapter extends ArrayAdapter<MyDataModel> {
 
     // Constructors
     public MyArrayAdapter(Context context, List < MyDataModel > objects) {
-        super(context, 0, objects);
+        super(context, R.layout.layout_row_view_category, objects);
         this.context = context;
         this.mInflater = LayoutInflater.from(context);
         modelList = objects;
     }
 
-    @Override
-    public MyDataModel getItem(int position) {
-        return modelList.get(position);
-    }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -48,7 +47,7 @@ public class MyArrayAdapter extends ArrayAdapter<MyDataModel> {
             vh = (ViewHolder) convertView.getTag();
         }
 
-        MyDataModel item = getItem(position);
+        final MyDataModel item = modelList.get(position);
         if (item.getProductStatus()) {
             vh.textViewItem.setText(item.getItem());
             vh.textViewPrice.setText(String.valueOf(inrFormat.format(item.getPrice())));
@@ -60,6 +59,14 @@ public class MyArrayAdapter extends ArrayAdapter<MyDataModel> {
         } else {
 
         }
+        vh.buttonAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, cart.class);
+                intent.putExtra("product", item);
+                context.startActivity(intent);
+            }
+        });
 
 
 
@@ -73,21 +80,24 @@ public class MyArrayAdapter extends ArrayAdapter<MyDataModel> {
         public final TextView textViewItem;
         public final TextView textViewPrice;
         public final ImageView imageViewType;
+        public final Button buttonAdd;
 
 
-        private ViewHolder(RelativeLayout rootView, TextView textViewItem, TextView textViewPrice, ImageView imageViewType) {
+        private ViewHolder(RelativeLayout rootView, TextView textViewItem, TextView textViewPrice, ImageView imageViewType, Button buttonAdd) {
             this.rootView = rootView;
             this.textViewPrice = textViewPrice;
             this.textViewItem = textViewItem;
             this.imageViewType = imageViewType;
+            this.buttonAdd = buttonAdd;
         }
 
         public static ViewHolder create(RelativeLayout rootView) {
             TextView textViewPrice = rootView.findViewById(R.id.price);
             TextView textViewItem = rootView.findViewById(R.id.item);
             ImageView imageViewType = rootView.findViewById(R.id.foodType);
+            Button buttonAdd = rootView.findViewById(R.id.add);
 
-            return new ViewHolder(rootView, textViewItem, textViewPrice, imageViewType);
+            return new ViewHolder(rootView, textViewItem, textViewPrice, imageViewType, buttonAdd);
         }
     }
 }

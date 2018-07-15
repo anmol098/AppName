@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.util.Log;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -20,7 +19,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class restaurant_menu extends AppCompatActivity {
-    private static String url = "http://www.aapreneur.com/JSON/";
+    private static String url = "http://www.aapreneur.com/JSON/123456.php";
     private String TAG = MainActivity.class.getSimpleName();
     private ListView listView;
     private ArrayList<MyDataModel> list;
@@ -42,7 +41,7 @@ public class restaurant_menu extends AppCompatActivity {
         listView = findViewById(R.id.listView);
         listView.setAdapter(adapter);
 
-        barcode = getIntent().getStringExtra("table");
+       /* barcode = getIntent().getStringExtra("table");
 
         // close the activity in case of empty barcode
         if (TextUtils.isEmpty(barcode)) {
@@ -52,7 +51,8 @@ public class restaurant_menu extends AppCompatActivity {
 
 
             new GetContacts().execute();
-        }
+        }*/
+        new GetContacts().execute();
     }
     /**
      * Async task class to get json by making HTTP call
@@ -75,7 +75,7 @@ public class restaurant_menu extends AppCompatActivity {
             HttpHandler sh = new HttpHandler();
 
             // Making a request to url and getting response
-            String jsonStr = sh.makeServiceCall(url + barcode);
+            String jsonStr = sh.makeServiceCall(url);
 
             Log.e(TAG, "Response from url: " + jsonStr);
 
@@ -87,6 +87,7 @@ public class restaurant_menu extends AppCompatActivity {
                     for (int i = 0; i < items.length(); i++) {
                         JSONObject c = items.getJSONObject(i);
                         MyDataModel model = new MyDataModel();
+                        int id = c.getInt("id");
                         String category = c.getString("category");
                         boolean type = c.getBoolean("isVeg");
                         String item = c.getString("item");
@@ -99,6 +100,7 @@ public class restaurant_menu extends AppCompatActivity {
                         Log.e("catagory", "cataagory " + category);
 
                         model.setItem(item);
+                        model.setId(id);
                         model.setPrice(price);
                         model.setType(type);
                         model.setDescription(description);
