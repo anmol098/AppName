@@ -234,28 +234,25 @@ public class cart extends AppCompatActivity {
 
     private void createJson() {
         try {
-            int i = 0;
-            JSONObject studentsObj = new JSONObject();
+            JSONArray jsonArray = new JSONArray();
+            Log.e("cart", "ab " + Cart.contents());
             for (final Item item : Cart.contents()) {
                 JSONObject order = new JSONObject();
                 try {
-                    order.put("ITEM" + i, item.getProduct().getItem());
-                    order.put("QUANTITY" + i, item.getQuantity());
-                    i = i + 1;
-
-
+                    order.put("ITEM", item.getProduct().getItem());
+                    order.put("QUANTITY", item.getQuantity());
                 } catch (JSONException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
-                JSONArray jsonArray = new JSONArray();
 
 
                 jsonArray.put(order);
-
-
-                studentsObj.put("Students", jsonArray);
-                String jsonStr = studentsObj.toString();
+                JSONObject orderObj = new JSONObject();
+                orderObj.put("Order", jsonArray);
+                orderObj.put("table", item.getProduct().getTableNumber());
+                orderObj.put("total", Cart.total());
+                String jsonStr = orderObj.toString();
                 Log.e("JSON STING", jsonStr);
             }
 
