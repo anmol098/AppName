@@ -82,7 +82,9 @@ public class restaurant_menu extends AppCompatActivity {
             if (jsonStr != null) {
                 try {
                     JSONObject jsonObj = new JSONObject(jsonStr);
+                    MyDataModel model1 = new MyDataModel();
                     Log.e("price", "price" + jsonObj.getString("table"));
+                    model1.setTableNumber(jsonObj.getInt("table"));
                     JSONArray items = jsonObj.getJSONArray("items");
                     for (int i = 0; i < items.length(); i++) {
                         JSONObject c = items.getJSONObject(i);

@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:id="@+id/parentLayout"
     android:background="#ffe0e0"
     android:orientation="vertical"
     android:clipToPadding="false"
@@ -26,15 +27,32 @@
             android:layout_toEndOf="@id/foodType">
 
 
-            <TextView
-                android:id="@+id/item"
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="ITEM001100"
-                android:theme="@style/Rupees" />
+                android:orientation="vertical">
 
-        <TextView
+
+                <TextView
+                    android:id="@+id/item"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:text="ITEM001100"
+                    android:theme="@style/Rupees" />
+
+                <TextView
+                    android:id="@+id/description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:text="description"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+
+            <TextView
             android:id="@+id/price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

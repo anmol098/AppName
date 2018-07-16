@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.aapreneur.appname.R;
 import com.aapreneur.appname.cart;
@@ -48,25 +49,34 @@ public class MyArrayAdapter extends ArrayAdapter<MyDataModel> {
         }
 
         final MyDataModel item = modelList.get(position);
-        if (item.getProductStatus()) {
+        vh.parentLayout.setVisibility(View.VISIBLE);
+        vh.rootView.setVisibility(View.VISIBLE);
             vh.textViewItem.setText(item.getItem());
             vh.textViewPrice.setText(String.valueOf(inrFormat.format(item.getPrice())));
+        vh.textViewDescription.setText(item.getDescription());
 
             if (item.getType())
                 vh.imageViewType.setImageResource(R.drawable.ic_veg);
             else
                 vh.imageViewType.setImageResource(R.drawable.ic_non_veg);
-        } else {
+        if (item.getProductStatus()) {
+            vh.buttonAdd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, cart.class);
+                    intent.putExtra("product", item);
+                    context.startActivity(intent);
+                }
+            });
 
+        } else {
+            vh.buttonAdd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(getContext(), "Item Currently not Availavle", Toast.LENGTH_LONG).show();
+                }
+            });
         }
-        vh.buttonAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, cart.class);
-                intent.putExtra("product", item);
-                context.startActivity(intent);
-            }
-        });
 
 
 
@@ -77,27 +87,32 @@ public class MyArrayAdapter extends ArrayAdapter<MyDataModel> {
 
     private static class ViewHolder {
         public final RelativeLayout rootView;
+        public final RelativeLayout parentLayout;
         public final TextView textViewItem;
         public final TextView textViewPrice;
+        public final TextView textViewDescription;
         public final ImageView imageViewType;
         public final Button buttonAdd;
 
 
-        private ViewHolder(RelativeLayout rootView, TextView textViewItem, TextView textViewPrice, ImageView imageViewType, Button buttonAdd) {
+        private ViewHolder(RelativeLayout rootView, RelativeLayout parentLayout, TextView textViewItem, TextView textViewPrice, ImageView imageViewType, Button buttonAdd, TextView textViewDescription) {
             this.rootView = rootView;
+            this.parentLayout = parentLayout;
             this.textViewPrice = textViewPrice;
             this.textViewItem = textViewItem;
             this.imageViewType = imageViewType;
             this.buttonAdd = buttonAdd;
+            this.textViewDescription = textViewDescription;
         }
 
         public static ViewHolder create(RelativeLayout rootView) {
+            RelativeLayout parentLayout = rootView.findViewById(R.id.parentLayout);
             TextView textViewPrice = rootView.findViewById(R.id.price);
             TextView textViewItem = rootView.findViewById(R.id.item);
             ImageView imageViewType = rootView.findViewById(R.id.foodType);
             Button buttonAdd = rootView.findViewById(R.id.add);
-
-            return new ViewHolder(rootView, textViewItem, textViewPrice, imageViewType, buttonAdd);
+            TextView textViewDescription = rootView.findViewById(R.id.description);
+            return new ViewHolder(rootView, parentLayout, textViewItem, textViewPrice, imageViewType, buttonAdd, textViewDescription);
         }
     }
 }

@@ -30,6 +30,9 @@ public class MyDataModel implements Serializable {
     @SerializedName("quantity")
     private int quantity;
 
+    @SerializedName("tableNumber")
+    private int tableNumber;
+
 
     public int getId() {
         return id;
@@ -89,6 +92,14 @@ public class MyDataModel implements Serializable {
 
     public String getDescription() {
         return description;
+    }
+
+    public int getTableNumber() {
+        return tableNumber;
+    }
+
+    public void setTableNumber(int tableNumber) {
+        this.tableNumber = tableNumber;
     }
 
     public void setDescription(String description) {

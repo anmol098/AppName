@@ -24,7 +24,11 @@ public class Cart {
 
     public static void remove(MyDataModel product) {
         int index = getIndex(product);
-        items.remove(index);
+        int quantity = items.get(index).getQuantity() - 1;
+        items.get(index).setQuantity(quantity);
+        if (items.get(index).getQuantity() == 0) {
+            items.remove(index);
+        }
     }
 
     public static double total() {
@@ -33,6 +37,14 @@ public class Cart {
             s += item.getProduct().getPrice() * item.getQuantity();
         }
         return s;
+    }
+
+    public static int size() {
+        int size = 0;
+        for (Item item : items) {
+            size = size + 1;
+        }
+        return size;
     }
 
     public static boolean isExists(MyDataModel product) {
